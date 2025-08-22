@@ -31,9 +31,11 @@ public class FileController {
 
     /** 실제 업로드 검사(실제 저장 로직은 요구 범위 밖, 필요 시 추가) */
     @PostMapping("/upload")
-    @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<String> upload(@RequestParam("file") MultipartFile file){
+    public ApiResponse<String> upload(@RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty() || file.getOriginalFilename() == null) {
+            throw new IllegalArgumentException("업로드할 파일이 없습니다.");
+        }
         validationService.validate(file.getOriginalFilename());
-        return ApiResponse.ok("업로드 허용되었습니다.");
+        return ApiResponse.ok("업로드 허용");
     }
 }
