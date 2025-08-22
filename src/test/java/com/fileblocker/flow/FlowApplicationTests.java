@@ -1,4 +1,4 @@
-package com.example.flow;
+package com.fileblocker.flow;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

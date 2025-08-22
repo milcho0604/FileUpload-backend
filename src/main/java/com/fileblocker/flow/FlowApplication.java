@@ -1,4 +1,4 @@
-package com.example.flow;
+package com.fileblocker.flow;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
