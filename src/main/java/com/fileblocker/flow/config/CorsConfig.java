@@ -16,7 +16,8 @@ public class CorsConfig {
         // 프런트 개발 서버들(필요한 것만 등록)
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173", // Vite
-                "http://localhost:8081"  // Vue CLI / webpack dev server
+                "http://localhost:8081",  // Vue CLI / webpack dev server
+                "https://file-upload-front.vercel.app"
         ));
         // 허용 메서드
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
