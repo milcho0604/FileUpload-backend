@@ -1,0 +1,53 @@
+name: Deploy to EC2
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ec2-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to EC2 and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -euxo pipefail
+            cd ${{ secrets.EC2_WORKDIR }}
+
+            # 원격 주소를 SSH(Deploy Key)로 고정
+            git remote set-url origin ${{ secrets.GIT_REMOTE }}
+
+            # 최신 코드로 동기화
+            git fetch --all --prune
+            git checkout main
+            git reset --hard origin/main
+
+            # .env 필수 존재
+            test -f .env
+
+            # 이전 컨테이너 내리기(있으면)
+            docker compose down || true
+
+            # 빌드 & 기동
+            docker compose up -d --build
+
+            # 헬스체크 (최대 30초)
+            for i in $(seq 1 15); do
+              if curl -fsS http://localhost:8080/api/file/health >/dev/null; then
+                echo "Health OK"
+                exit 0
+              fi
+              sleep 2
+            done
+
+            echo "Health check failed; printing last logs"
+            docker compose logs --tail=200
+            exit 1

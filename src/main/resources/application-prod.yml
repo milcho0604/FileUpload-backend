@@ -1,0 +1,38 @@
+server:
+  port: 8080
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    # ? JPA? ??? ?? "?"? data.sql ??
+    defer-datasource-initialization: true
+  # ? ???? DB? ???? data.sql ?? ??
+  sql:
+    init:
+      mode: always
+
+  servlet:
+    multipart:
+      maxFileSize: ${MULTIPART_MAX_FILE_SIZE:50MB}
+      maxRequestSize: ${MULTIPART_MAX_REQUEST_SIZE:50MB}
+
+  application:
+    name: file-service

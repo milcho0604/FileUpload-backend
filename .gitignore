@@ -6,9 +6,15 @@ build/
 !**/src/test/**/build/
 
 # 모든 application.yml 무시
-**/application*.yml
+#**/application*.yml
 src/main/resources/application.yml
 resources/application.yml
+
+#src/main/resources/application-prod.yml
+#resources/application-prod.yml
+
+src/main/resources/application-local.yml
+resources/application-local.yml
 
 ### STS ###
 .apt_generated
